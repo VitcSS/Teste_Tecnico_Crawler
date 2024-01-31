@@ -1,3 +1,4 @@
+import os
 import scrapy
 import pandas as pd
 from scrapy_splash import SplashRequest
@@ -16,6 +17,9 @@ class TickerSpider(scrapy.Spider):
         soup = bs(response.text, 'html.parser')
         tables = soup.find_all('table')
         table =  soup.find('table', class_='table sortable PctYearToDate')
+        if table == None:
+            # In case of airflow deployment, set task to failed at this point
+            return None
         # Find all the th (table header) elements within the table's thead
         header_cells = table.find('thead').find_all('th')
         # Extract column names
@@ -31,9 +35,13 @@ class TickerSpider(scrapy.Spider):
                 df = pd.concat([df, pd.DataFrame([row_data])], ignore_index=True)
             if len(df) > 9:
                 break
+        # 
         df = df[['Ticker','Currency','Last Value','As of']]
+        # Translate names 
         df.columns = ['Ticker','Moeda','Valor','Data']
         df['Data'] = pd.to_datetime(df['Data']).dt.strftime("%Y/%m/%d")
-        df.to_csv('res.csv', sep = ';', index=False)
+        # In case of deployment direct the file saved to prefered cloud storage (for example  in AWS):
+        df.to_csv(os.path.join(os.getcwd(), '..', '..','..','data/output/data.csv'), sep = ';', index=False)
+        # In case of airflow deployment, set task to sucess at this point 
             
 

@@ -1,2 +1,3 @@
 test_env/
+Compassft/Compassft/__pycache__/
 data/output/*.csv

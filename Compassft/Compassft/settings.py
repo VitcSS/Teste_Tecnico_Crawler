@@ -12,15 +12,6 @@ BOT_NAME = "Compassft"
 SPIDER_MODULES = ["Compassft.spiders"]
 NEWSPIDER_MODULE = "Compassft.spiders"
 
-# Obey robots.txt rules
-ROBOTSTXT_OBEY = True
- 
-# Desired file format
-FEED_FORMAT = "csv"
- 
-# Name of the file where data extracted is stored
-FEED_URI = "friendshipfeed.csv"
-
 # Enable Splash downloader middlewares
 DOWNLOADER_MIDDLEWARES = { 
     'scrapy_splash.SplashCookiesMiddleware': 723,  # This middleware handles cookies in requests made to Splash, and it is assigned the priority of 723

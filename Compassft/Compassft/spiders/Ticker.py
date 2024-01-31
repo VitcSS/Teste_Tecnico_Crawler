@@ -41,6 +41,8 @@ class TickerSpider(scrapy.Spider):
         df.columns = ['Ticker','Moeda','Valor','Data']
         df['Data'] = pd.to_datetime(df['Data']).dt.strftime("%Y/%m/%d")
         # In case of deployment direct the file saved to prefered cloud storage (for example  in AWS):
+        if not os.path.exists(os.path.join(os.getcwd(), '..', '..','..','data/output/')):
+            os.makedirs(os.path.join(os.getcwd(), '..', '..','..','data/output/'))
         df.to_csv(os.path.join(os.getcwd(), '..', '..','..','data/output/data.csv'), sep = ';', index=False)
         # In case of airflow deployment, set task to sucess at this point 
             
